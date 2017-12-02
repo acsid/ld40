@@ -1,11 +1,15 @@
 sti = require "libs.sti"
 bump = require "libs.bump"
 Camera = require "libs.hump.camera"
+Timer = require "libs.hump.timer"
 entity = require "entity"
+fans = require "fans"
 
 camera = {}
+world = {}
 game = {
-	score = 0
+	score = 0,
+  fans = 0,
 }
 
 local layer = {}
@@ -18,6 +22,7 @@ function game:init()
 	loadMap("map/dev.lua")
 end
 
+
 function spawn(objects)
 local obj = objects or map.objects
 	for _, object in ipairs(obj) do
@@ -26,6 +31,20 @@ local obj = objects or map.objects
 	else
 	end
 end
+mapWidth = map.width * 32
+mapHeight = map.height * 32
+fans.x = math.random(0,mapWidth)
+fans.y = math.random(0,mapHeight)
+local fansentity = {
+    name = "No1 Fan",
+    x = fans.x,
+    y = fans.y,
+    w = 10,
+    h = 10,
+    isFan = true
+  }
+  entity.spawn(fansentity)
+  game.fans = game.fans + 1
 end
 
 function loadMap(mapFile,x,y)
@@ -53,12 +72,48 @@ function loadMap(mapFile,x,y)
 				w			= 	player.width,
 				h			= 	player.height,
 				isPlayer	=	true,
+        isFan = false
 			}
 			entity.spawn(player.entity)
 		--elseif object.name == "mapInfo" then
 		end
 	end
 	spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
+  spawn()
 	layer.sprites = entity.getObjects()
 	--update sprite layer
 	function layer:update(dt)
@@ -79,7 +134,6 @@ end
 
 function game:update(dt)
 	local game = game
-	print("update?")
 		for _, ent in pairs(layer.sprites) do
 			entity.update(ent,dt)
 		end
@@ -91,8 +145,9 @@ function game:draw()
 	for _, ent in pairs(layer.sprites) do
 			entity.draw(ent)
 		end
+		map:bump_draw(world)
 	camera:detach()
-	love.graphics.print(("score: %s"):format(game.score),0,0)
+	love.graphics.print(("score: %s fans: %s mapinfo: %s %s"):format(game.score,game.fans,map.height,map.width),0,0)
 end
 
 

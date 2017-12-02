@@ -41,4 +41,12 @@ function player.draw(self)
 	camera:lookAt(math.floor(self.x),math.floor(self.y))
 end
 
+function player.getX(self)
+  return self.x
+end
+
+function player.getY(self)
+  return self.Y
+end
+
 return player
