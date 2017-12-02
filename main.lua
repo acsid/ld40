@@ -1,27 +1,16 @@
-local sti = require "libs.sti"
-local bump = require "libs.bump"
+﻿gamestate 	=	require "libs.hump.gamestate"
 
+require "game"
+require "menu"
+
+g_screenres = {
+	w=math.floor(love.graphics.getWidth()),
+	h=math.floor(love.graphics.getHeight())
+}
 
 function love.load()
-	windowWidth = love.graphics.getWidth()
-	windowHeight = love.graphics.getHeight()
-	
-	love.physics.setMeter(16)
-	map = sti("map/dev.lua",{"bump"})
-	
-	world = bump.newWorld()
-	map:bump_init(world)
-	
-	
-	
-	
-end
+	love.window.setTitle("LD40 - the more you have the worst it is")
+	gamestate.registerEvents()
+	gamestate.switch(menu)
 
-function love.draw()
-	map:draw()
-	love.graphics.print("LD40 - The more you have the worst it is",1,1)
-end
-
-function love.update(dt)
-	map:update(dt)
 end
