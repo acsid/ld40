@@ -22,7 +22,16 @@ function fans.update(self,dt,targetX,targetY)
   local targety = targetY or 0
 
   local dx , dy = 0 , 0
-  if ( h.distance(self.x,self.y,targetx,targety) < 250 ) then
+  -- mx, my = love.mouse.getX()+targetx - (love.graphics.getWidth()/2) , love.mouse.getY()+targety-(love.graphics.getHeight()/2)
+  
+	-- print(("mousex: %s mouseY: %s dist: %s"):format(mx,my,h.distance(self.x,self.y,mx, my)))
+	-- if ( h.distance(self.x,self.y,mx, my) < 32) then
+	--print(("mousex: %s mouseY: %s"):format(love.mouse.getX(),love.mouse.getY()))
+		-- if (love.mouse.isDown(1) == true) then
+			-- print(("mousex: %s mouseY: %s"):format(love.mouse.getX(),love.mouse.getY()))
+			-- dy,dx = 0,0
+		-- end
+	if ( h.distance(self.x,self.y,targetx,targety) < 250 ) then
 	  if ( self.x > targetx ) then
 		dx = -self.speed * dt
 	  end
@@ -35,7 +44,6 @@ function fans.update(self,dt,targetX,targetY)
 	  if ( self.y < targety ) then
 		 dy = self.speed * dt
 	  end
-	
 	else 
 	
 	end

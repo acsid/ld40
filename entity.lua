@@ -31,6 +31,8 @@ function entity.update(self,dt)
 		targetY = player.getY(self)
 	elseif (self.isFan == true) then
 		fans.update(self,dt,targetX,targetY)
+	elseif (self.isBodyguard == true) then
+		bguard.update(self,dt,targetX,targetY)
 	end
 end
 
@@ -39,6 +41,8 @@ function entity.draw(self)
 		player.draw(self)
 	elseif (self.isFan == true) then
 		fans.draw(self)
+	elseif (self.isBodyguard == true) then
+		bguard.draw(self)
   end
   
 end

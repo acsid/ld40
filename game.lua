@@ -4,6 +4,7 @@ Camera = require "libs.hump.camera"
 Timer = require "libs.hump.timer"
 entity = require "entity"
 fans = require "fans"
+bguard = require "bodyguard"
 h = require  "helpers"
 
 camera = {}
@@ -21,11 +22,25 @@ function game:init()
 	print("Game started")
 	love.physics.setMeter(16)
 	loadMap("map/dev.lua")
+	love.mouse.setVisible(false)
 end
 
 function addScore(points)
 	addpoints = points or 1
 	game.score = game.score + addpoints
+end
+
+function spawnGuard()
+	local bodyGuard = {
+		name = "bodyGuard",
+		x = 32,
+		y = 32,
+		w = 16,
+		h = 32,
+		isBodyguard = true,
+		sprite = love.graphics.newImage("images/bodyguard.png")
+	}
+	entity.spawn(bodyGuard)
 end
 
 function spawn()
@@ -96,6 +111,7 @@ function loadMap(mapFile,x,y)
 	end
 	Timer.every(10, function() spawn() end)
 	Timer.every(1,function() addScore(1) end)
+	spawnGuard()
 	
 end
 
@@ -114,7 +130,7 @@ function game:draw()
 	for _, ent in pairs(layer.sprites) do
 			entity.draw(ent)
 		end
-		map:bump_draw(world)
+		--map:bump_draw(world)
 	camera:detach()
 	love.graphics.print(("score: %s fans: %s mapinfo: %s %s"):format(game.score,game.fans,map.height,map.width),0,0)
 end
