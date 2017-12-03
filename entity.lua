@@ -33,6 +33,8 @@ function entity.update(self,dt)
 		fans.update(self,dt,targetX,targetY)
 	elseif (self.isBodyguard == true) then
 		bguard.update(self,dt,targetX,targetY)
+	elseif (self.isPower == true) then
+		pjuice.update(self,dt)
 	end
 end
 
@@ -43,9 +45,12 @@ function entity.draw(self)
 		fans.draw(self)
 	elseif (self.isBodyguard == true) then
 		bguard.draw(self)
+	elseif (self.isPower == true) then
+		pjuice.draw(self)
   end
-  
 end
+
+
 
 return entity
 

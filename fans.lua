@@ -7,6 +7,11 @@ local fans = {
     isFan = true
   }
 
+	function fans.brain(self)
+		self.brain = math.random(0,8)
+		Timer.after(math.random(1,5), function() fans.brain(self) end)
+	end
+	
 	function fans.init(self)
 	
 	end 
@@ -16,6 +21,8 @@ function fans.update(self,dt,targetX,targetY)
 		self.attack = false
 		self.flash = false
 		Timer.after(5, function() self.attack = true end)
+		fans.brain(self)
+		
 	end
 --print(("target %s %s"):format(targetX,targetY))
   local targetx = targetX or 0
@@ -45,10 +52,38 @@ function fans.update(self,dt,targetX,targetY)
 		 dy = self.speed * dt
 	  end
 	else 
-	
+		if (self.brain == 0) then
+		elseif (self.brain == 1) then
+			dx = -self.speed * dt
+		elseif (self.brain == 2) then
+			dx = self.speed * dt
+		elseif (self.brain == 3) then
+			dy = -self.speed * dt
+		elseif (self.brain == 4) then
+			dy = self.speed * dt
+		elseif (self.brain == 5) then
+			dx = -self.speed * dt
+			dy = -self.speed * dt
+		elseif (self.brain == 6) then
+			dx = self.speed * dt
+			dy = self.speed * dt
+		elseif (self.brain == 7) then
+			dx = self.speed * dt
+			dy = -self.speed * dt
+		elseif (self.brain == 8) then
+			dx = -self.speed * dt
+			dy = self.speed * dt
+		end
 	end
   local goalX, goalY = self.x + dx , self.y + dy
 	local aX, aY, acols, alen = world:check(self,goalX,goalY)
+	
+	for i = 1 , alen do
+		local col = acols[i]
+			if (col.other.isBodyguard == true) then
+				aX, aY = self.x , self.y
+			end
+	end
 	
 	world:update(self,aX,aY)
 	
@@ -58,7 +93,7 @@ function fans.update(self,dt,targetX,targetY)
 	--print(h.distance(self.x,self.y,targetx,targety))
 		if (h.distance(self.x,self.y,targetx,targety) < 96) then
 			Timer.during(0.5,function() self.flash = true end)
-			spawn()
+			spawn("fans")
 		end
 		self.attack = false
 		Timer.after(math.random(5,20), function() self.attack = true end)
