@@ -46,7 +46,7 @@ function player.getX(self)
 end
 
 function player.getY(self)
-  return self.Y
+  return self.y
 end
 
 return player

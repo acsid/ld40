@@ -21,24 +21,24 @@ function entity.clear()
 	objects = {}
 end
 
-targetX, targetY = 0,0
+targetX = 0
+targetY = 0
 
 function entity.update(self,dt)
 	if (self.isPlayer == true) then
 		player.update(self,dt)
-    targetX = player.getX(self)
-    targetY = player.getY(self)
-  elseif (self.isFan == true) then
-    fans.update(self,dt,targetX,targetY)
-  end
+		targetX = player.getX(self)
+		targetY = player.getY(self)
+	elseif (self.isFan == true) then
+		fans.update(self,dt,targetX,targetY)
+	end
 end
 
 function entity.draw(self)
 	if(self.isPlayer == true) then
 		player.draw(self)
 	elseif (self.isFan == true) then
-    fans.draw(self)
-    
+		fans.draw(self)
   end
   
 end

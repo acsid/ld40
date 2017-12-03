@@ -4,6 +4,7 @@ Camera = require "libs.hump.camera"
 Timer = require "libs.hump.timer"
 entity = require "entity"
 fans = require "fans"
+h = require  "helpers"
 
 camera = {}
 world = {}
@@ -22,15 +23,13 @@ function game:init()
 	loadMap("map/dev.lua")
 end
 
-
-function spawn(objects)
-local obj = objects or map.objects
-	for _, object in ipairs(obj) do
-	if (object.name == "Player") then
-		print("atcha")
-	else
-	end
+function addScore(points)
+	addpoints = points or 1
+	game.score = game.score + addpoints
 end
+
+function spawn()
+
 mapWidth = map.width * 32
 mapHeight = map.height * 32
 fans.x = math.random(0,mapWidth)
@@ -39,10 +38,13 @@ local fansentity = {
     name = "No1 Fan",
     x = fans.x,
     y = fans.y,
-    w = 10,
-    h = 10,
-    isFan = true
+    w = 16,
+    h = 32,
+	sprite		= 	love.graphics.newImage("images/fan1.png"),
+    isFan = true,
+	speed = math.random(40,90)
   }
+  addScore(10)
   entity.spawn(fansentity)
   game.fans = game.fans + 1
 end
@@ -72,48 +74,13 @@ function loadMap(mapFile,x,y)
 				w			= 	player.width,
 				h			= 	player.height,
 				isPlayer	=	true,
-        isFan = false
+				isFan = false
 			}
 			entity.spawn(player.entity)
 		--elseif object.name == "mapInfo" then
 		end
 	end
 	spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
-  spawn()
 	layer.sprites = entity.getObjects()
 	--update sprite layer
 	function layer:update(dt)
@@ -127,7 +94,8 @@ function loadMap(mapFile,x,y)
 			entity.draw(ent)
 		end
 	end
-	
+	Timer.every(10, function() spawn() end)
+	Timer.every(1,function() addScore(1) end)
 	
 end
 
@@ -138,6 +106,7 @@ function game:update(dt)
 			entity.update(ent,dt)
 		end
 	map:update(dt)
+	Timer.update(dt)
 end
 function game:draw()
 	camera:attach()
