@@ -2,19 +2,25 @@ sti = require "libs.sti"
 bump = require "libs.bump"
 Camera = require "libs.hump.camera"
 Timer = require "libs.hump.timer"
+vector = require "libs.hump.vector"
 entity = require "entity"
 fans = require "fans"
 bguard = require "bodyguard"
-pjuice	=	require "powerjuice"
+collectable	=	require "collectable"
 h = require  "helpers"
+sounds = require "sounds"
+inspect = require "inspect"
 
 camera = {}
 world = {}
 game = {
 	score = 0,
-  fans = 0,
+	fans = 0,
+	trophy = 0
 }
 
+targetX = 0
+targetY = 0
 local layer = {}
 
 function game:init()
@@ -24,6 +30,7 @@ function game:init()
 	love.physics.setMeter(16)
 	loadMap("map/dev.lua")
 	love.mouse.setVisible(false)
+	sounds.play(sounds.bgm)
 	
 end
 
@@ -38,13 +45,20 @@ function spawn(entityType)
 	print(("Spawn: %s"):format(entityType))
 		mapWidth = map.width * 32
 		mapHeight = map.height * 32
+		local xx = math.random(0,mapWidth)
+		local yy = math.random(0,mapHeight)
+		-- local tilex, tiley = map:convertPixelToTile(xx,yy)
+		-- tilex = math.floor(tilex)
+		-- tiley = math.floor(tiley)
+		
+		-- local tile = map.layers[1].data[tilex][tiley]
+		-- print(inspect(tile))
+
 	if ( entityType == "fans" ) then
-		fans.x = math.random(0,mapWidth)
-		fans.y = math.random(0,mapHeight)
 		local fansentity = {
 			name = "No1 Fan",
-			x = fans.x,
-			y = fans.y,
+			x = xx,
+			y = yy,
 			w = 16,
 			h = 32,
 			sprite		= 	love.graphics.newImage("images/fan1.png"),
@@ -57,28 +71,43 @@ function spawn(entityType)
 	  elseif (entityType == "bodyGuard") then
 		local bodyGuard = {
 			name = "bodyGuard",
-			x = 32,
-			y = 32,
+			x = targetX,
+			y = targetY,
 			w = 16,
 			h = 32,
 			isBodyguard = true,
 			sprite = love.graphics.newImage("images/bodyguard.png")
 		}
 		entity.spawn(bodyGuard)
+		sounds.play(sounds.powerup)
 	  elseif (entityType == "powerJuice") then
-		local xx = math.random(0,mapWidth)
-		local yy = math.random(0,mapHeight)
+	
 		local powerJuice = {
 			name	=	"RockBull",
 			x		=	xx,
 			y		=	yy,
 			w		=	8,
 			h		=	16,
+			isCollectable	=	true,
 			isPower	=	true,
 			sprite	=	love.graphics.newImage("images/powerjuice.png")
 		}
 		entity.spawn(powerJuice)
+	  	  elseif (entityType == "trophy") then
+		local powerJuice = {
+			name	=	"Best Trophy",
+			x		=	xx,
+			y		=	yy,
+			w		=	16,
+			h		=	16,
+			isCollectable	=	true,
+			isTrophy	=	true,
+			sprite	=	love.graphics.newImage("images/trophy.png")
+		}
+		entity.spawn(powerJuice)
+	  
 	  end
+	  
 end
 
 function unSpawn()
@@ -145,7 +174,9 @@ function loadMap(mapFile,x,y)
 	Timer.every(10, function() spawn("fans") end)
 	Timer.every(1,function() addScore(1) end)
 	Timer.every(15, function() spawn("powerJuice") end )
-	spawn("bodyGuard")
+	--spawn("bodyGuard")
+	spawn("trophy")
+	Timer.every(20,function() spawn("trophy") end)
 	
 end
 
@@ -167,12 +198,18 @@ function game:draw()
 		end
 		--map:bump_draw(world)
 	camera:detach()
-	love.graphics.print(("score: %s fans: %s mapinfo: %s %s"):format(game.score,game.fans,map.height,map.width),0,0)
+	love.graphics.print(("score: %s fans: %s trophy: %s "):format(game.score,game.fans,game.trophy),0,0)
 end
 
 function game:keypressed(k)
 	if ( k == "escape" ) then
 		love.event.quit()
+	elseif ( k == "f4") then
+		sounds.volume("-")
+	elseif ( k == "f5") then
+		sounds.volume("+")
+	elseif ( k == "f6") then
+		sounds.stop()
 	end
 
 end

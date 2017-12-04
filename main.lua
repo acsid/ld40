@@ -2,6 +2,7 @@
 
 require "game"
 require "menu"
+require "gameover"
 
 g_screenres = {
 	w=math.floor(love.graphics.getWidth()),

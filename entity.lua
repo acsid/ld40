@@ -21,8 +21,7 @@ function entity.clear()
 	objects = {}
 end
 
-targetX = 0
-targetY = 0
+
 
 function entity.update(self,dt)
 	if (self.isPlayer == true) then
@@ -33,8 +32,8 @@ function entity.update(self,dt)
 		fans.update(self,dt,targetX,targetY)
 	elseif (self.isBodyguard == true) then
 		bguard.update(self,dt,targetX,targetY)
-	elseif (self.isPower == true) then
-		pjuice.update(self,dt)
+	elseif (self.isCollectable == true) then
+		collectable.update(self,dt)
 	end
 end
 
@@ -45,8 +44,8 @@ function entity.draw(self)
 		fans.draw(self)
 	elseif (self.isBodyguard == true) then
 		bguard.draw(self)
-	elseif (self.isPower == true) then
-		pjuice.draw(self)
+	elseif (self.isCollectable == true) then
+		collectable.draw(self)
   end
 end
 

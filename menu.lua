@@ -16,6 +16,10 @@ function menu:draw()
 	love.graphics.clear()
 	love.graphics.setColor(255,255,255)
 	love.graphics.print("press any key to start",20,20)
+	love.graphics.print("HELP: ARROW, W A S D to control the player",40,40)
+	love.graphics.print("HELP: Collect 5 trophy to unlock the bodyguard",40,60)
+	love.graphics.print("HELP: Move the mouse to control the bodyguard",40,80)
+	love.graphics.print("HELP: f4 = Vol - f5 = vol + f6 = Music Mute",40,100)
 	love.graphics.setCanvas()
 	love.graphics.clear()
 	
@@ -38,5 +42,4 @@ end
 function menu:keyreleased(key,code)
 	print(key)
 	gamestate.switch(game)
-
 end

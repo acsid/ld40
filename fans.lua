@@ -4,8 +4,9 @@ local fans = {
     y = 0,
     w = 10,
     h = 10,
-    isFan = true
-  }
+    isFan = true,
+	timer = Timer.new()
+	}
 
 	function fans.brain(self)
 		self.brain = math.random(0,8)
@@ -15,6 +16,10 @@ local fans = {
 	function fans.init(self)
 	
 	end 
+  
+	function fans.killTarget(self)
+	
+	end
   
 function fans.update(self,dt,targetX,targetY)
 	if (self.attack == nil) then
@@ -93,6 +98,7 @@ function fans.update(self,dt,targetX,targetY)
 	--print(h.distance(self.x,self.y,targetx,targety))
 		if (h.distance(self.x,self.y,targetx,targety) < 96) then
 			Timer.during(0.5,function() self.flash = true end)
+			sounds.play(sounds.flash)
 			spawn("fans")
 		end
 		self.attack = false
